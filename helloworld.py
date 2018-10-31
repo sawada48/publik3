@@ -972,17 +972,17 @@ def clientBot(op):
 							if msg.toType == 2:
 								group = client.getGroup(to)
 								client.sendMessage(to, "Group ID : {}".format(group.id))
-						elif cmd == "gruplist1":
+						elif cmd == "grouplist":
 							if msg._from in admin:
-								ma = ""
-								a = 0
-								gid = client.getGroupIdsJoined()
-								for i in gid:
-									G = client.getGroup(i)
-									a = a + 1
-									end = "\n"
-									ma += "┃┃ " + str(a) + ". " +G.name+ "\n"
-									client.sendMessage(msg.to,"┏━━[ GROUP LIST ]\n┃┃\n"+ma+"┃┃\n┗━━[ Total「"+str(len(gid))+"」Groups ]")
+								groups = client.getGroupIdsJoined()
+								ret_ = "╔══[ Group List ]"
+								no = 0
+								for gid in groups:
+									group = client.getGroup(gid)
+									no += 1
+									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
+								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
+								client.sendMessage(to, str(ret_))
 						elif cmd == "memberlist":
 							if msg.toType == 2:
 								group = client.getGroup(to)
