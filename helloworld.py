@@ -29,6 +29,15 @@ def restartBot():
 	print ("[ INFO ] BOT RESETTED")
 	python = sys.executable
 	os.execl(python, python, *sys.argv)
+	
+def removeCmd(text, key=''):
+    if key == '':
+        setKey = '' if not settings['setKey']['status'] else settings['setKey']['key']
+    else:
+        setKey = key
+    text_ = text[len(setKey):]
+    sep = text_.split(' ')
+    return text_[len(sep[0] + ' '):]
 
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
