@@ -966,13 +966,13 @@ def clientBot(op):
 						elif cmd.startswith('grouplist'):
 							textt = removeCmd(text, setKey)
 							texttl = textt.lower()
-							gids = line.getGroupIdsJoined()
+							gids = client.getGroupIdsJoined()
 							gnames = []
 							ress = []
 							res = '╭───「 Group List 」'
 							res += '\n├ List:'
 							if gids:
-								groups = line.getGroups(gids)
+								groups = client.getGroups(gids)
 								no = 0
 								if len(groups) > 200:
 									parsed_len = len(groups)//200+1
@@ -1001,7 +1001,7 @@ def clientBot(op):
 							ress.append(res)
 							if cmd == 'grouplist':
 								for res in ress:
-									line.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
+									client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
 							elif texttl.startswith('leave '):
 								texts = textt[6:].split(', ')
 								leaved = []
