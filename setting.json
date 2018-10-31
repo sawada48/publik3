@@ -12,7 +12,7 @@
     "checkContact": false,
     "checkPost": false,
     "checkSticker": false,
-    "detectUnsend": true,
+    "detectUnsend": false,
     "keyCommand": "",
     "mimic": {
         "status": false,
