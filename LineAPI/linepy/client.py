@@ -1,34 +1,35 @@
 # -*- coding: utf-8 -*-
 from ..akad.ttypes import Message
-from .auth import LineAuth
-from .models import LineModels
-from .talk import LineTalk
-from .square import LineSquare
-from .call import LineCall
+from .auth import Auth
+from .models import Models
+from .talk import Talk
+from .square import Square
+from .call import Call
+from .timeline import Timeline
 from .shop import Shop
 
-import json
+class LINE(Auth, Models, Talk, Square, Call, Timeline, Shop):
 
-class LineClient(LineAuth, LineModels, LineTalk, LineSquare, LineCall):
+    def __init__(self, idOrAuthToken=None, passwd=None, speedThrift=False, certificate=None, systemName=None, appName=None, showQr=False, keepLoggedIn=True):
 
-    customThrift = None
+        Auth.__init__(self)
+        if not (idOrAuthToken or idOrAuthToken and passwd):
+            self.loginWithQrCode(keepLoggedIn=keepLoggedIn, systemName=systemName, appName=appName, speedThrift=speedThrift, showQr=showQr)
+        if idOrAuthToken and passwd:
+            self.loginWithCredential(_id=idOrAuthToken, passwd=passwd, certificate=certificate, systemName=systemName, appName=appName, keepLoggedIn=keepLoggedIn, speedThrift=speedThrift)
+        elif idOrAuthToken and not passwd:
+            self.loginWithAuthToken(authToken=idOrAuthToken, appName=appName, speedThrift=speedThrift)
 
-    def __init__(self, id=None, passwd=None, authToken=None, certificate=None, systemName=None, appName=None, showQr=False, keepLoggedIn=True, customThrift=None):
-        
-        LineAuth.__init__(self)
-        if customThrift:
-            self.customThrift = customThrift
-        if not (authToken or id and passwd):
-            self.qrLogin(keepLoggedIn=keepLoggedIn, systemName=systemName, appName=appName, showQr=showQr)
-        if authToken:
-            self.tokenLogin(authToken=authToken, appName=appName)
-        if id and passwd:
-            self.login(_id=id, passwd=passwd, certificate=certificate, systemName=systemName, appName=appName, keepLoggedIn=keepLoggedIn)
+        self.__initAll()
+
+    def __initAll(self):
 
         self.profile    = self.talk.getProfile()
         self.groups     = self.talk.getGroupIdsJoined()
 
-        LineModels.__init__(self)
-        LineTalk.__init__(self)
-        LineSquare.__init__(self)
-        LineCall.__init__(self)
+        Models.__init__(self)
+        Talk.__init__(self)
+        Square.__init__(self)
+        Call.__init__(self)
+        Timeline.__init__(self)
+        Shop.__init__(self)
