@@ -38,15 +38,6 @@ def removeCmd(text, key=''):
     text_ = text[len(setKey):]
     sep = text_.split(' ')
     return text_[len(sep[0] + ' '):]
-	
-def removeCmd(text, key=''):
-    if key == '':
-        setKey = '' if not settings['setKey']['status'] else settings['setKey']['key']
-    else:
-        setKey = key
-    text_ = text[len(setKey):]
-    sep = text_.split(' ')
-    return text_[len(sep[0] + ' '):]
 
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
@@ -454,7 +445,6 @@ def clientBot(op):
 					elif msg.toType == 2:
 						to = receiver
 					if msg.contentType == 0:
-def executeCmd(msg, text, txt, cmd, msg_id, receiver, sender, to, setKey):
 						if cmd == "logout":
 							if msg._from in admin:
 								client.sendMessage(to, "Berhasil mematikan selfbot")
@@ -1059,13 +1049,13 @@ def executeCmd(msg, text, txt, cmd, msg_id, receiver, sender, to, setKey):
 									for gid in gids:
 										if gid in leaved:
 											continue
-												client.leaveGroup(gid)
-												leaved.append(gid)
-												time.sleep(0.8)
-											if to not in leaved:
-												client.sendMessage(to, 'Success leave all group ♪')
-										else:
-											client.sendMessage(to, 'Failed leave group with name `%s`, name not in list ♪' % name)
+										client.leaveGroup(gid)
+										leaved.append(gid)
+										time.sleep(0.8)
+									if to not in leaved:
+										client.sendMessage(to, 'Success leave all group ♪')
+								else:
+									client.sendMessage(to, 'Failed leave group with name `%s`, name not in list ♪' % name)
 							else:
 								for res in ress:
 									client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
