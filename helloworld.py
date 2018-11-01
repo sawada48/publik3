@@ -1073,33 +1073,32 @@ def clientBot(op):
 								client.sendMention(to, ret_, dataMid)
 						if 'Semua musuh sudah mati.' in msg.text:
 							if msg._from in admin:
-								settings["autotagg"] = True
-								group = client.getGroup(to)
-								midMembers = [contact.mid for contact in group.members]
-								midSelect = len(midMembers)
-								no = 0
-								for mentionMembers in range(midSelect+1):
-									ret_ = "╔══[ Mention Members ]"
-									dataMid = []
-									for dataMention in group.members[mentionMembers*20 : (mentionMembers+1)*20]:
-										dataMid.append(dataMention.mid)
-										no += 1
-										ret_ += "\n╠ {}. @!".format(str(no))
-									ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
-									client.sendMention(to, ret_, dataMid)
+								if settings['autotagg'] == True:
+									group = client.getGroup(to)
+									midMembers = [contact.mid for contact in group.members]
+									midSelect = len(midMembers)
+									no = 0
+									for mentionMembers in range(midSelect+1):
+										ret_ = "╔══[ Mention Members ]"
+										dataMid = []
+										for dataMention in group.members[mentionMembers*20 : (mentionMembers+1)*20]:
+											dataMid.append(dataMention.mid)
+											no += 1
+											ret_ += "\n╠ {}. @!".format(str(no))
+										ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
+										client.sendMention(to, ret_, dataMid)
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
 								if spl == 'on':
 									if msg.to in autotag:
+											settings["autotagg"] = True
+											msgs = "Auto tag sudah aktif"
+									else:
 										if settings["autotagg"] == True:
 											autotag.append(msg.to)
 											ginfo = client.getGroup(msg.to)
 											msgs = "Auto tag diaktifkan\nDi Group : " +str(ginfo.name)
-											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
-									else:
-											settings["autotagg"] = True
-											msgs = "Auto tag sudah aktif"
 											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
 								elif spl == 'off':
 									if msg.to in autotag:
