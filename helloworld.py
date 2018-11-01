@@ -15,6 +15,8 @@ clientStart = time.time()
 clientPoll = OEPoll(client)
 admin = "u77cb218d07fddacaa5ee49f2f27cd0bb","ueff8f78401c867593c6ddc8aeb8c649d","u06593411e1da2aaf17bbe97b154fb16e"
 
+autotag = []
+
 languageOpen = codecs.open("language.json","r","utf-8")
 readOpen = codecs.open("read.json","r","utf-8")
 settingsOpen = codecs.open("setting.json","r","utf-8")
@@ -1071,6 +1073,7 @@ def clientBot(op):
 								client.sendMention(to, ret_, dataMid)
 						if 'Semua musuh sudah mati.' in msg.text:
 							if msg._from in admin:
+								wait["autotagg"] = True
 								group = client.getGroup(to)
 								midMembers = [contact.mid for contact in group.members]
 								midSelect = len(midMembers)
@@ -1084,9 +1087,28 @@ def clientBot(op):
 										ret_ += "\n╠ {}. @!".format(str(no))
 									ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 									client.sendMention(to, ret_, dataMid)
-						if 'Atas nama keadilan,' in msg.text:
+						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
-								client.sendMessage(to, "Press F for respect.")
+								spl = msg.text.replace('Autotag ','')
+								if spl == 'on':
+									if msg.to in autotag:
+										if wait["autotagg"] == True:
+											autotag.append(msg.to)
+											ginfo = client.getGroup(msg.to)
+											msgs = "Auto tag diaktifkan\nDi Group : " +str(ginfo.name)
+											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
+									else:
+											msgs = "Auto tag sudah aktif"
+											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
+								elif spl == 'off':
+									if msg.to in autotag:
+										if wait["autotagg"] == False:
+											autotag.remove(msg.to)
+											ginfo = client.getGroup(msg.to)
+											msgs = "Auto tag dinonaktifkan\nDi Group : " +str(ginfo.name)
+									else:
+											msgs = "Auto tag sudah tidak aktif"
+											client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
