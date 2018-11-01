@@ -1091,16 +1091,16 @@ def clientBot(op):
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
 								if spl == 'on':
-									if settings["autotagg"] == True:
-										if msg.to not in autotag:
-											autotag.append(msg.to)
-											ginfo = client.getGroup(msg.to)
+									if msg.to not in autotag:
+										autotag.append(msg.to)
+										ginfo = client.getGroup(msg.to)
+										if settings["autotagg"] == True:
 											msgs = "Auto tag diaktifkan\nDi Group : " +str(ginfo.name)
 											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
 									else:
-											settings["autotagg"] = True
-											msgs = "Auto tag sudah aktif"
-											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
+										settings["autotagg"] = True
+										msgs = "Auto tag sudah aktif"
+										client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
 								elif spl == 'off':
 									if settings["autotagg"] == False:
 										if msg.to in autotag:
