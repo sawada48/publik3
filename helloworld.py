@@ -29,6 +29,24 @@ def restartBot():
 	print ("[ INFO ] BOT RESETTED")
 	python = sys.executable
 	os.execl(python, python, *sys.argv)
+	
+def removeCmd(text, key=''):
+    if key == '':
+        setKey = '' if not settings['setKey']['status'] else settings['setKey']['key']
+    else:
+        setKey = key
+    text_ = text[len(setKey):]
+    sep = text_.split(' ')
+    return text_[len(sep[0] + ' '):]
+	
+def removeCmd(text, key=''):
+    if key == '':
+        setKey = '' if not settings['setKey']['status'] else settings['setKey']['key']
+    else:
+        setKey = key
+    text_ = text[len(setKey):]
+    sep = text_.split(' ')
+    return text_[len(sep[0] + ' '):]
 
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
@@ -436,6 +454,7 @@ def clientBot(op):
 					elif msg.toType == 2:
 						to = receiver
 					if msg.contentType == 0:
+def executeCmd(msg, text, txt, cmd, msg_id, receiver, sender, to, setKey):
 						if cmd == "logout":
 							if msg._from in admin:
 								client.sendMessage(to, "Berhasil mematikan selfbot")
@@ -963,17 +982,93 @@ def clientBot(op):
 							if msg.toType == 2:
 								group = client.getGroup(to)
 								client.sendMessage(to, "Group ID : {}".format(group.id))
-						elif cmd == "grouplist":
-							if msg._from in admin:
-								groups = client.getGroupIdsJoined()
-								ret_ = "╔══[ Group List ]"
+						elif cmd.startswith('grouplist'):
+							textt = removeCmd(text, setKey)
+							texttl = textt.lower()
+							gids = client.getGroupIdsJoined()
+							gnames = []
+							ress = []
+							res = '╭───「 Group List 」'
+							res += '\n├ List:'
+							if gids:
+								groups = client.getGroups(gids)
 								no = 0
-								for gid in groups:
-									group = client.getGroup(gid)
+								if len(groups) > 200:
+									parsed_len = len(groups)//200+1
+									for point in range(parsed_len):
+										for group in groups[point*200:(point+1)*200]:
+											no += 1
+											res += '\n│ %i. %s//%i' % (no, group.name, len(group.members))
+											gnames.append(group.name)
+										if res:
+											if res.startswith('\n'): res = res[1:]
+											if point != parsed_len - 1:
+												ress.append(res)
+										if point != parsed_len - 1:
+											res = ''
+							else:
+								for group in groups:
 									no += 1
-									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
-								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
-								client.sendMessage(to, str(ret_))
+									res += '\n│ %i. %s//%i' % (no, group.name, len(group.members))
+									gnames.append(group.name)
+						else:
+							res += '\n│ Nothing'
+						res += '\n├ Usage : '
+						res += '\n│ • {key}GroupList'
+						res += '\n│ • {key}GroupList Leave <num/name/all>'
+						res += '\n╰───「 Hello World 」'
+						ress.append(res)
+						if cmd == 'grouplist':
+							for res in ress:
+								client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
+						elif texttl.startswith('leave '):
+							texts = textt[6:].split(', ')
+							leaved = []
+							if not gids:
+								return client.sendMessage(to, 'Failed leave group, nothing group in list')
+							for texxt in texts:
+								num = None
+								name = None
+								try:
+									num = int(texxt)
+								except ValueError:
+									name = texxt
+								if num != None:
+									if num <= len(groups) and num > 0:
+										group = groups[num - 1]
+										if group.id in leaved:
+											client.sendMessage(to, 'Already leave group %s' % group.name)
+											continue
+										client.leaveGroup(group.id)
+										leaved.append(group.id)
+										if to not in leaved:
+											client.sendMessage(to, 'Success leave group %s' % group.name)
+									else:
+										client.sendMessage(to, 'Failed leave group number %i, number out of range' % num)
+								elif name != None:
+									if name in gnames:
+										group = groups[gnames.index(name)]
+										if group.id in leaved:
+											client.sendMessage(to, 'Already leave group %s' % group.name)
+											continue
+										client.leaveGroup(group.id)
+										leaved.append(group.id)
+										if to not in leaved:
+											client.sendMessage(to, 'Success leave group %s' % group.name)
+								elif name.lower() == 'all':
+									for gid in gids:
+										if gid in leaved:
+											continue
+												client.leaveGroup(gid)
+												leaved.append(gid)
+												time.sleep(0.8)
+											if to not in leaved:
+												client.sendMessage(to, 'Success leave all group ♪')
+										else:
+											client.sendMessage(to, 'Failed leave group with name `%s`, name not in list ♪' % name)
+							else:
+								for res in ress:
+									client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
 						elif cmd == "memberlist":
 							if msg.toType == 2:
 								group = client.getGroup(to)
