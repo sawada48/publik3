@@ -1091,22 +1091,27 @@ def clientBot(op):
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
 								if spl == 'on':
-									if msg.to in autotag:
-										autotag.append(msg.to)
-										ginfo = client.getGroup(msg.to)
-										msgs = "Auto tag diaktifkan\nDi Group : " +str(ginfo.name)
-										client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
+									if msg.to not in autotag:
+										if settings["autotagg"] == True:
+											autotag.append(msg.to)
+											ginfo = client.getGroup(msg.to)
+											msgs = "Auto tag diaktifkan\nDi Group : " +str(ginfo.name)
+											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
 									else:
-										msgs = "Auto tag sudah aktif"
-										client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
+											settings["autotagg"] = True
+											msgs = "Auto tag sudah aktif"
+											client.sendMessage(msg.to, "「Diaktifkan」\n" + msgs)
 								elif spl == 'off':
 									if msg.to in autotag:
-										autotag.remove(msg.to)
-										ginfo = client.getGroup(msg.to)
-										msgs = "Auto tag dinonaktifkan\nDi Group : " +str(ginfo.name)
+										if settings["autotagg"] == False:
+											autotag.remove(msg.to)
+											ginfo = client.getGroup(msg.to)
+											msgs = "Auto tag dinonaktifkan\nDi Group : " +str(ginfo.name)
+											client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
 									else:
-										msgs = "Auto tag sudah tidak aktif"
-										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
+											settings["autotagg"] = False
+											msgs = "Auto tag sudah tidak aktif"
+											client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
