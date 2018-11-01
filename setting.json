@@ -7,6 +7,7 @@
     "autoRead": false,
     "autoRespon": true,
     "autoResponMessage": "Woi @!, gak usah tag tag -_-",
+    "autotagg": false,
     "changeGroupPicture": [],
     "changePictureProfile": false,
     "checkContact": false,
