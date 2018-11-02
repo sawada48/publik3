@@ -1099,7 +1099,7 @@ def clientBot(op):
 									e = e + 1
 									end = '\n'
 									me += str(e) + ". " +client.getGroup(group).name + "\n"                                    
-									client.sendMessage(msg.to,"Auto Tag\n\nTotal「%s」Auto Tag yang aktif" %(str(len(autotag))))
+									client.sendMessage(msg.to,"Auto Tag :\n"+me+"\nTotal「%s」Auto Tag yang aktif" %(str(len(autotag))))
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
