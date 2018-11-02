@@ -7,7 +7,7 @@ from datetime import datetime
 from googletrans import Translator
 import ast, codecs, json, os, pytz, re, random, requests, sys, time, urllib.parse
 
-client = LINE()
+client = LINE("EyyWLaOEEHea0Zrkp7D7.asszleIJ47rHkDrse0vHnW.8vhO/Vn9cRJKa+ybHNjx2XfTK2UogO7T6Obq4QMdMUk=")
 #client = LINE("EwBCEUwULBwOrdEzXo8c.k22jtIKVk8NTeigAgvYfda.Rx0g501fqcE60YK6z/qMlqjnrC6xIYzYicYnJrqSvn0=")
 
 clientMid = client.profile.mid
@@ -1087,6 +1087,19 @@ def clientBot(op):
 											ret_ += "\n╠ {}. @!".format(str(no))
 										ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 										client.sendMention(to, ret_, dataMid)
+						if 'Atas nama keadilan,' in msg.text:
+							if msg._from in admin:
+								client.sendMention(to, "Press F for respect")
+						elif cmd == "listautotag":
+							if msg._from in admin:
+								me = ""
+								e = 0
+								gid = autotag
+								for group in gid:
+									e = e + 1
+									end = '\n'
+									me += str(e) + ". " +client.getGroup(group).name + "\n"                                    
+									client.sendMessage(msg.to,"Auto Tag\n\nTotal「%s」Auto Tag yang aktif" %(str(len(autotag))))
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
