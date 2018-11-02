@@ -1071,6 +1071,7 @@ def clientBot(op):
 									ret_ += "\n╠ {}. @!".format(str(no))
 								ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 								client.sendMention(to, ret_, dataMid)
+								
 						if 'Semua musuh sudah mati.' in msg.text:
 							if msg._from in admin:
 								if msg.to in autotag:
@@ -1123,6 +1124,13 @@ def clientBot(op):
 										settings["autotagg"] = False
 										msgs = "Auto tag sudah tidak aktif"
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
+						elif msg.text.lower() in ["Group id"]:
+							if msg.from_ in admin:	
+								gid = client.getGroupIdsJoined()
+								h = ""
+								for i in gid:
+									h += "[ %s ] :\n%s\n\n" % (client.getGroup(i).name,i)
+								client.sendMessage(msg.to,h)
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
