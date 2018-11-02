@@ -1087,6 +1087,7 @@ def clientBot(op):
 											ret_ += "\n╠ {}. @!".format(str(no))
 										ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 										client.sendMention(to, ret_, dataMid)
+										
 						if 'Atas nama keadilan,' in msg.text:
 							if msg._from in admin:
 								client.sendMessage(to, "Press F for respect")
@@ -1124,6 +1125,12 @@ def clientBot(op):
 										settings["autotagg"] = False
 										msgs = "Auto tag sudah tidak aktif"
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
+						elif cmd == "sawada out":
+							if msg.from_ in admin:
+								gid = client.getGroupIdsJoined()
+								for i in gid:
+									client.leaveGroup(i)
+										
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
