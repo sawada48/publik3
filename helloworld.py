@@ -982,7 +982,7 @@ def clientBot(op):
 								for gid in groups:
 									group = client.getGroup(gid)
 									no += 1
-									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
+									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members), str(len(group.id)))
 								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
 								client.sendMessage(to, str(ret_))
 						elif cmd == "memberlist":
@@ -1124,13 +1124,7 @@ def clientBot(op):
 										settings["autotagg"] = False
 										msgs = "Auto tag sudah tidak aktif"
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
-						elif msg.text.lower() in ["Group id"]:
-							if msg.from_ in admin:	
-								gid = client.getGroupIdsJoined()
-								h = ""
-								for i in gid:
-									h += "[ %s ] :\n%s\n\n" % (client.getGroup(i).name,i)
-								client.sendMessage(msg.to,h)
+						
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
