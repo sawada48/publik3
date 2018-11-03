@@ -1218,9 +1218,9 @@ def clientBot(op):
 								for res in ress:
 									client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
 							try:
-								except Exception as error:
-									if args.traceback: traceback.print_tb(error.__traceback__)
-									sys.exit('++ Error : %s' % str(error))
+							except Exception as error:
+								if args.traceback: traceback.print_tb(error.__traceback__)
+								sys.exit('++ Error : %s' % str(error))
 										
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
