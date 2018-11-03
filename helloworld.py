@@ -986,7 +986,7 @@ def clientBot(op):
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
 								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
 								client.sendMessage(to, str(ret_))
-						if spl == ('leave'):
+						if spl == 'leave':
 							texts = text.split(" ")
 							leaved = []
 							if not groups:
