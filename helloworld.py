@@ -976,7 +976,6 @@ def clientBot(op):
 								client.sendMessage(to, "Group ID : {}".format(group.id))
 						elif 'grouplist ' in msg.text:
 							if msg._from in admin:
-								spl = msg.text.replace('grouplist ','')
 								groups = client.getGroupIdsJoined()
 								ret_ = "╔══[ Group List ]"
 								no = 0
@@ -986,40 +985,6 @@ def clientBot(op):
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
 								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
 								client.sendMessage(to, str(ret_))
-						if spl == 'leave':
-							texts = text.split(" ")
-							leaved = []
-							if not groups:
-								return client.sendMessage(to, 'Failed leave group, nothing group in list')
-							for texxt in texts:
-								num = None
-								name = None
-								try:
-									num = int(texxt)
-								except ValueError:
-									name = texxt
-								if num != None:
-									if num <= len(groups) and num > 0:
-										group = groups[num - 1]
-										if group.id in leaved:
-											client.sendMessage(to, 'Already leave group %s' % group.name)
-											continue
-										client.leaveGroup(group.id)
-										leaved.append(group.id)
-										if to not in leaved:
-											client.sendMessage(to, 'Success leave group %s' % group.name)
-									else:
-										client.sendMessage(to, 'Failed leave group number %i, number out of range' % num)
-								elif name != None:
-									if name in gnames:
-										group = groups[gnames.index(name)]
-										if group.id in leaved:
-											client.sendMessage(to, 'Already leave group %s' % group.name)
-											continue
-										client.leaveGroup(group.id)
-										leaved.append(group.id)
-										if to not in leaved:
-											client.sendMessage(to, 'Success leave group %s' % group.name)
 						elif cmd == "memberlist":
 							if msg.toType == 2:
 								group = client.getGroup(to)
