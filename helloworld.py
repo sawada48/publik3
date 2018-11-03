@@ -974,8 +974,9 @@ def clientBot(op):
 							if msg.toType == 2:
 								group = client.getGroup(to)
 								client.sendMessage(to, "Group ID : {}".format(group.id))
-						elif cmd == "grouplist":
+						elif 'grouplist ' in msg.text:
 							if msg._from in admin:
+								spl = msg.text.replace('grouplist ','')
 								groups = client.getGroupIdsJoined()
 								ret_ = "╔══[ Group List ]"
 								no = 0
@@ -985,6 +986,40 @@ def clientBot(op):
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
 								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
 								client.sendMessage(to, str(ret_))
+						if spl == ('leave'):
+							texts = text.split(" ")
+							leaved = []
+							if not groups:
+								return client.sendMessage(to, 'Failed leave group, nothing group in list')
+							for texxt in texts:
+								num = None
+								name = None
+								try:
+									num = int(texxt)
+								except ValueError:
+									name = texxt
+								if num != None:
+									if num <= len(groups) and num > 0:
+										group = groups[num - 1]
+										if group.id in leaved:
+											client.sendMessage(to, 'Already leave group %s' % group.name)
+											continue
+										client.leaveGroup(group.id)
+										leaved.append(group.id)
+										if to not in leaved:
+											client.sendMessage(to, 'Success leave group %s' % group.name)
+									else:
+										client.sendMessage(to, 'Failed leave group number %i, number out of range' % num)
+								elif name != None:
+									if name in gnames:
+										group = groups[gnames.index(name)]
+										if group.id in leaved:
+											client.sendMessage(to, 'Already leave group %s' % group.name)
+											continue
+										client.leaveGroup(group.id)
+										leaved.append(group.id)
+										if to not in leaved:
+											client.sendMessage(to, 'Success leave group %s' % group.name)
 						elif cmd == "memberlist":
 							if msg.toType == 2:
 								group = client.getGroup(to)
@@ -1087,21 +1122,19 @@ def clientBot(op):
 											ret_ += "\n╠ {}. @!".format(str(no))
 										ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 										client.sendMention(to, ret_, dataMid)
-										
 						if 'Atas nama keadilan,' in msg.text:
 							if msg._from in admin:
 								client.sendMessage(to, "Press F for respect")
 						elif cmd == "listautotag":
 							if msg._from in admin:
-								groups = autotag
-								ret_ = "╔══[ List Auto Tag ]"
-								no = 0
-								for gid in groups:
-									group = client.getGroup(gid)
-									no += 1
-									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
-								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
-								client.sendMessage(to, str(ret_))
+								me = ""
+								e = 0
+								gid = autotag
+								for group in gid:
+									e = e + 1
+									end = '\n'
+									me += str(e) + ". " +client.getGroup(group).name + "\n"                                    
+									client.sendMessage(msg.to,"Auto Tag :\n"+me+"\nTotal「%s」Auto Tag yang aktif" %(str(len(autotag))))
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
@@ -1125,12 +1158,6 @@ def clientBot(op):
 										settings["autotagg"] = False
 										msgs = "Auto tag sudah tidak aktif"
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
-						elif cmd == "sawada out":
-							if msg.from_ in admin:
-								gid = client.getGroupIdsJoined()
-								for i in gid:
-									client.leaveGroup(i)
-										
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
