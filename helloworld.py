@@ -1092,15 +1092,16 @@ def clientBot(op):
 								client.sendMessage(to, "Press F for respect")
 						elif cmd == "listautotag":
 							if msg._from in admin:
-								groups = autotag()
-								ret_ = "╔══[ List Auto Tag ]"
+								groups = autotag
+								ret_ = "╔══[ Group List ]"
 								no = 0
-								for gid in groups:
+								for group in gid:
 									group = client.getGroup(gid)
 									no += 1
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
 								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
 								client.sendMessage(to, str(ret_))
+						elif cmd == "memberlist":
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
