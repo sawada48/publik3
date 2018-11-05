@@ -1093,12 +1093,13 @@ def clientBot(op):
 						elif cmd == "listautotag":
 							if msg._from in admin:
 								gid = autotag
-								ret_ = "╔══[ Group List ]"
+								ret_ = "╔══[ List Auto Tag ]"
 								no = 0
 								for group in gid:
+									group = client.getGroup(gid)
 									no += 1
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
-								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
+								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(gid)))
 								client.sendMessage(to, str(ret_))
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
