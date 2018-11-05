@@ -974,7 +974,7 @@ def clientBot(op):
 							if msg.toType == 2:
 								group = client.getGroup(to)
 								client.sendMessage(to, "Group ID : {}".format(group.id))
-						elif 'grouplist ' in msg.text:
+						elif cmd == "grouplist":
 							if msg._from in admin:
 								groups = client.getGroupIdsJoined()
 								ret_ = "╔══[ Group List ]"
@@ -1092,14 +1092,15 @@ def clientBot(op):
 								client.sendMessage(to, "Press F for respect")
 						elif cmd == "listautotag":
 							if msg._from in admin:
-								me = ""
-								e = 0
-								gid = autotag
-								for group in gid:
-									e = e + 1
-									end = '\n'
-									me += str(e) + ". " +client.getGroup(group).name + "\n"                                    
-									client.sendMessage(msg.to,"Auto Tag :\n"+me+"\nTotal「%s」Auto Tag yang aktif" %(str(len(autotag))))
+								groups = autotag()
+								ret_ = "╔══[ List Auto Tag ]"
+								no = 0
+								for gid in groups:
+									group = client.getGroup(gid)
+									no += 1
+									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
+								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
+								client.sendMessage(to, str(ret_))
 						elif 'Autotag ' in msg.text:
 							if msg._from in admin:
 								spl = msg.text.replace('Autotag ','')
