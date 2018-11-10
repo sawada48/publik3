@@ -5,7 +5,7 @@ from gtts import gTTS
 from bs4 import BeautifulSoup
 from datetime import datetime
 from googletrans import Translator
-import ast, codecs, json, os, pytz, re, random, requests, sys, time, urllib.parse
+import ast, codecs, json, os, pytz, re, random, requests, sys, time, urllib.parse, traceback
 
 client = LINE("EyyWLaOEEHea0Zrkp7D7.asszleIJ47rHkDrse0vHnW.8vhO/Vn9cRJKa+ybHNjx2XfTK2UogO7T6Obq4QMdMUk=")
 #client = LINE("EwBCEUwULBwOrdEzXo8c.k22jtIKVk8NTeigAgvYfda.Rx0g501fqcE60YK6z/qMlqjnrC6xIYzYicYnJrqSvn0=")
@@ -43,6 +43,7 @@ def removeCmd(text, key=''):
 
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
+    traceback.print_tb(text.__traceback__)
     tz = pytz.timezone("Asia/Makassar")
     timeNow = datetime.now(tz=tz)
     timeHours = datetime.strftime(timeNow,"(%H:%M)")
@@ -425,7 +426,7 @@ def clientBot(op):
 				client.acceptGroupInvitation(op.param1)
 				client.sendMention(op.param1, settings["autoJoinMessage"], [op.param2])
 
-		if op.type == 26 or 25:
+		if op.type in (26, 25):
 			try:
 				msg = op.message
 				text = str(msg.text)
@@ -1071,7 +1072,7 @@ def clientBot(op):
 									ret_ += "\n╠ {}. @!".format(str(no))
 								ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 								client.sendMention(to, ret_, dataMid)
-						if 'Semua musuh sudah mati.' in msg.text:
+						elif 'Semua musuh sudah mati.' in msg.text:
 							if msg._from in admin:
 								if msg.to in autotag:
 									group = client.getGroup(to)
@@ -1087,15 +1088,15 @@ def clientBot(op):
 											ret_ += "\n╠ {}. @!".format(str(no))
 										ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
 										client.sendMention(to, ret_, dataMid)
-						if 'Atas nama keadilan,' in msg.text:
+						elif 'Atas nama keadilan,' in msg.text:
 							if msg._from in admin:
 								client.sendMessage(to, "Press F for respect")
 						elif cmd == "listautotag":
 							if msg._from in admin:
-								groups = autotag
-								ret_ = "╔══[ List Auto Tag ]"
+								gid = autotag
+								ret_ = "╔══[ Group List ]"
 								no = 0
-								for gid in groups:
+								for group in gid:
 									group = client.getGroup(gid)
 									no += 1
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
