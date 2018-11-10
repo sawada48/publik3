@@ -40,6 +40,27 @@ def removeCmd(text, key=''):
     text_ = text[len(setKey):]
     sep = text_.split(' ')
     return text_[len(sep[0] + ' '):]
+    
+def mentionMembers(to, mids=[]):
+    if myMid in mids: mids.remove(myMid)
+    parsed_len = len(mids)//20+1
+    result = '╭───「 Mention Members 」\n'
+    mention = '@zeroxyuuki\n'
+    no = 0
+    for point in range(parsed_len):
+        mentionees = []
+        for mid in mids[point*20:(point+1)*20]:
+            no += 1
+            result += '│ %i. %s' % (no, mention)
+            slen = len(result) - 12
+            elen = len(result) + 3
+            mentionees.append({'S': str(slen), 'E': str(elen - 4), 'M': mid})
+            if mid == mids[-1]:
+                result += '╰───「 Hello World 」\n'
+        if result:
+            if result.endswith('\n'): result = result[:-1]
+            line.sendMessage(to, result, {'MENTION': json.dumps({'MENTIONEES': mentionees})}, 0)
+        result = ''
 
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
@@ -1059,19 +1080,17 @@ def clientBot(op):
 								client.sendMessage(to, "Berhasil broadcast ke {} group".format(str(len(groups))))
 								
 						elif cmd == 'mention':
-							group = client.getGroup(to)
-							midMembers = [contact.mid for contact in group.members]
-							midSelect = len(midMembers)
-							no = 0
-							for mentionMembers in range(midSelect+1):
-								ret_ = "╔══[ Mention Members ]"
-								dataMid = []
-								for dataMention in group.members[mentionMembers*20 : (mentionMembers+1)*20]:
-									dataMid.append(dataMention.mid)
-									no += 1
-									ret_ += "\n╠ {}. @!".format(str(no))
-								ret_ += "\n╚══[ Total {} Members]".format(str(len(dataMid)))
-								client.sendMention(to, ret_, dataMid)
+							members = []
+							if msg.toType == 1:
+								room = line.getCompactRoom(to)
+								members = [mem.mid for mem in room.contacts]
+							elif msg.toType == 2:
+								group = line.getCompactGroup(to)
+								members = [mem.mid for mem in group.members]
+							else:
+								return line.sendMessage(to, 'Failed mentionall members, use this command only on room or group chat')
+							if members:
+								mentionMembers(to, members)
 						elif 'Semua musuh sudah mati.' in msg.text:
 							if msg._from in admin:
 								if msg.to in autotag:
