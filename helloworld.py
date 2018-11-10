@@ -1143,6 +1143,7 @@ def clientBot(op):
 									res += '\n│ %i. %s//%i' % (no, group.name, len(group.members))
 									gnames.append(group.name)
 						else:
+							ress = []
 							res = '╭───「 Group List 」'
 						res += '\n│ Nothing'
 						res += '\n├ Usage : '
