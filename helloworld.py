@@ -1120,7 +1120,6 @@ def clientBot(op):
 							gids = client.getGroupIdsJoined()
 							gnames = []
 							ress = []
-							res = '╭───「 Group List 」'
 							res += '\n├ List:'
 							if gids:
 								groups = client.getGroups(gids)
@@ -1144,7 +1143,8 @@ def clientBot(op):
 									res += '\n│ %i. %s//%i' % (no, group.name, len(group.members))
 									gnames.append(group.name)
 						else:
-							res += '\n│ Nothing'
+							res = '╭───「 Group List 」'
+						res += '\n│ Nothing'
 						res += '\n├ Usage : '
 						res += '\n│ • {key}GroupList'
 						res += '\n│ • {key}GroupList Leave <num/name/all>'
@@ -1152,7 +1152,7 @@ def clientBot(op):
 						ress.append(res)
 						if cmd == 'grouplist':
 							for res in ress:
-								client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
+								client.sendMessage(to, str(res).format_map(SafeDict(key=setKey.title())))
 						elif texttl.startswith('leave '):
 							texts = textt[6:].split(', ')
 							leaved = []
@@ -1654,9 +1654,6 @@ def clientBot(op):
 					if msg.contentType == 0:
 						if settings["autoRead"] == True:
 							client.sendChatChecked(to, msg_id)
-						if sender not in admin:
-							if msg.toType != 0 and msg.toType == 2:
-						if text is None: return
 						if "/ti/g/" in msg.text.lower():
 							if settings["autoJoinTicket"] == True:
 								link_re = re.compile('(?:line\:\/|line\.me\/R)\/ti\/g\/([a-zA-Z0-9_-]+)?')
