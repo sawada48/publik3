@@ -975,17 +975,6 @@ def clientBot(op):
 							if msg.toType == 2:
 								group = client.getGroup(to)
 								client.sendMessage(to, "Group ID : {}".format(group.id))
-						elif cmd == "grouplist":
-							if msg._from in admin:
-								groups = client.getGroupIdsJoined()
-								ret_ = "╔══[ Group List ]"
-								no = 0
-								for gid in groups:
-									group = client.getGroup(gid)
-									no += 1
-									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
-								ret_ += "\n╚══[ Total {} Groups ]".format(str(len(groups)))
-								client.sendMessage(to, str(ret_))
 						elif cmd == "memberlist":
 							if msg.toType == 2:
 								group = client.getGroup(to)
@@ -1667,15 +1656,6 @@ def clientBot(op):
 							client.sendChatChecked(to, msg_id)
 						if sender not in admin:
 							if msg.toType != 0 and msg.toType == 2:
-								if 'MENTION' in msg.contentMetadata.keys()!= None:
-									names = re.findall(r'@(\w+)', text)
-									mention = ast.literal_eval(msg.contentMetadata['MENTION'])
-									mentionees = mention['MENTIONEES']
-									for mention in mentionees:
-										if clientMid in mention["M"]:
-											if settings["autoRespon"] == True:
-												client.sendMention(sender, settings["autoResponMessage"], [sender])
-											break
 						if text is None: return
 						if "/ti/g/" in msg.text.lower():
 							if settings["autoJoinTicket"] == True:
