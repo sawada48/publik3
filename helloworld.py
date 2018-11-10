@@ -1093,10 +1093,10 @@ def clientBot(op):
 								client.sendMessage(to, "Press F for respect")
 						elif cmd == "listautotag":
 							if msg._from in admin:
-								gid = autotag
+								groups = autotag
 								ret_ = "╔══[ Group List ]"
 								no = 0
-								for group in gid:
+								for gid in groups:
 									group = client.getGroup(gid)
 									no += 1
 									ret_ += "\n╠ {}. {} | {}".format(str(no), str(group.name), str(len(group.members)))
