@@ -32,6 +32,10 @@ def restartBot():
 	python = sys.executable
 	os.execl(python, python, *sys.argv)
 	
+class SafeDict(dict):
+    def __missing__(self, key):
+        return '{' + key + '}'
+	
 def removeCmd(text, key=''):
     if key == '':
         setKey = '' if not settings['setKey']['status'] else settings['setKey']['key']
@@ -40,6 +44,19 @@ def removeCmd(text, key=''):
     text_ = text[len(setKey):]
     sep = text_.split(' ')
     return text_[len(sep[0] + ' '):]
+    
+def parsingRes(res):
+    result = ''
+    textt = res.split('\n')
+    for text in textt:
+        if True not in [text.startswith(s) for s in ['╭', '├', '│', '╰']]:
+            result += '\n│ ' + text
+        else:
+            if text == textt[0]:
+                result += text
+            else:
+                result += '\n' + text
+    return result
     
 def logError(text):
     client.log("[ ERROR ] {}".format(str(text)))
@@ -1116,12 +1133,12 @@ def clientBot(op):
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
 						elif cmd.startswith('grouplist'):
 							textt = removeCmd(text, setKey)
-							texttl = textt.lower()
 							gids = client.getGroupIdsJoined()
 							gnames = []
 							ress = []
+							res = '╭───「 Group List 」'
 							res += '\n├ List:'
-							if gids:
+							for gid in gids:
 								groups = client.getGroups(gids)
 								no = 0
 								if len(groups) > 200:
@@ -1143,9 +1160,7 @@ def clientBot(op):
 									res += '\n│ %i. %s//%i' % (no, group.name, len(group.members))
 									gnames.append(group.name)
 						else:
-							ress = []
-							res = '╭───「 Group List 」'
-						res += '\n│ Nothing'
+							res += '\n│ Nothing'
 						res += '\n├ Usage : '
 						res += '\n│ • {key}GroupList'
 						res += '\n│ • {key}GroupList Leave <num/name/all>'
@@ -1154,8 +1169,8 @@ def clientBot(op):
 						if cmd == 'grouplist':
 							for res in ress:
 								client.sendMessage(to, str(res).format_map(SafeDict(key=setKey.title())))
-						elif texttl.startswith('leave '):
-							texts = textt[6:].split(', ')
+						elif text.lower.startswith('leave '):
+							texts = text[6:].split(', ')
 							leaved = []
 							if not gids:
 								return client.sendMessage(to, 'Failed leave group, nothing group in list')
@@ -1201,7 +1216,7 @@ def clientBot(op):
 									client.sendMessage(to, 'Failed leave group with name `%s`, name not in list ♪' % name)
 							else:
 								for res in ress:
-									client.sendMessage(to, parsingRes(res).format_map(SafeDict(key=setKey.title())))
+									client.sendMessage(to, str(res).format_map(SafeDict(key=setKey.title())))
 									
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
