@@ -1142,6 +1142,16 @@ def clientBot(op):
 										settings["autotagg"] = False
 										msgs = "Auto tag sudah tidak aktif"
 										client.sendMessage(msg.to, "「Dinonaktifkan」\n" + msgs)
+						elif cmd.startswith("leave "):
+							if msg._from in admin:
+								proses = text.split(" ")
+								ng = text.replace(proses[0] + " ","")
+								gid = client.getGroupIdsJoined()
+								for i in gid:
+									h = client.getGroup(i).name
+									if h == ng:
+										client.leaveGroup(i)
+										client.sendMessage(to,"Berhasil keluar dari grup " +h)
 						elif cmd == "lurking on":
 							tz = pytz.timezone("Asia/Makassar")
 							timeNow = datetime.now(tz=tz)
