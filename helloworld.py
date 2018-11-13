@@ -1594,18 +1594,6 @@ def clientBot(op):
 					if msg.contentType == 0:
 						if settings["autoRead"] == True:
 							client.sendChatChecked(to, msg_id)
-						if "/ti/g/" in msg.text.lower():
-							if settings["autoJoinTicket"] == True:
-								link_re = re.compile('(?:line\:\/|line\.me\/R)\/ti\/g\/([a-zA-Z0-9_-]+)?')
-								links = link_re.findall(text)
-								n_links = []
-								for l in links:
-									if l not in n_links:
-										n_links.append(l)
-								for ticket_id in n_links:
-									group = client.findGroupByTicket(ticket_id)
-									client.acceptGroupInvitationByTicket(group.id,ticket_id)
-									client.sendMessage(to, "Berhasil masuk ke group %s" % str(group.name))
 						if settings["detectUnsend"] == True:
 							try:
 								unsendTime = time.time()
